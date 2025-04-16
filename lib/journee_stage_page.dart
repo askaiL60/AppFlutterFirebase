@@ -17,12 +17,22 @@ class _JourneeStagePageState extends State<JourneeStagePage> {
   final TextEditingController lieuController = TextEditingController();
   final TextEditingController activitesController = TextEditingController();
   final TextEditingController competencesController = TextEditingController();
+  final TextEditingController presentationController = TextEditingController();
+  final TextEditingController objectifsController = TextEditingController();
+  final TextEditingController missionsController = TextEditingController();
+  final TextEditingController difficultesController = TextEditingController();
+  final TextEditingController conclusionController = TextEditingController();
 
   void _resetControllers() {
     dateController.clear();
     lieuController.clear();
     activitesController.clear();
     competencesController.clear();
+    presentationController.clear();
+    objectifsController.clear();
+    missionsController.clear();
+    difficultesController.clear();
+    conclusionController.clear();
   }
 
   Future<void> _addOrUpdateJournee({String? docId}) async {
@@ -33,6 +43,11 @@ class _JourneeStagePageState extends State<JourneeStagePage> {
       'lieu': lieuController.text,
       'activites': activitesController.text,
       'competences': competencesController.text,
+      'presentation': presentationController.text,
+      'objectifs': objectifsController.text,
+      'missions': missionsController.text,
+      'difficultes': difficultesController.text,
+      'conclusion': conclusionController.text,
       'uid': uid,
     };
 
@@ -52,49 +67,46 @@ class _JourneeStagePageState extends State<JourneeStagePage> {
       lieuController.text = doc['lieu'];
       activitesController.text = doc['activites'];
       competencesController.text = doc['competences'];
+      presentationController.text = doc['presentation'];
+      objectifsController.text = doc['objectifs'];
+      missionsController.text = doc['missions'];
+      difficultesController.text = doc['difficultes'];
+      conclusionController.text = doc['conclusion'];
     }
 
     showDialog(
       context: context,
-      builder:
-          (_) => AlertDialog(
-            title: Text(doc == null ? 'Ajouter' : 'Modifier'),
-            content: SingleChildScrollView(
-              child: Column(
-                children: [
-                  TextField(
-                    controller: dateController,
-                    decoration: InputDecoration(labelText: 'Date'),
-                  ),
-                  TextField(
-                    controller: lieuController,
-                    decoration: InputDecoration(labelText: 'Lieu'),
-                  ),
-                  TextField(
-                    controller: activitesController,
-                    decoration: InputDecoration(labelText: 'Activités'),
-                  ),
-                  TextField(
-                    controller: competencesController,
-                    decoration: InputDecoration(labelText: 'Compétences'),
-                  ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  _resetControllers();
-                },
-                child: Text('Annuler'),
-              ),
-              ElevatedButton(
-                onPressed: () => _addOrUpdateJournee(docId: doc?.id),
-                child: Text(doc == null ? 'Ajouter' : 'Modifier'),
-              ),
+      builder: (_) => AlertDialog(
+        title: Text(doc == null ? 'Ajouter une journée' : 'Modifier la journée'),
+        content: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextField(controller: dateController, decoration: InputDecoration(labelText: 'Date')),
+              TextField(controller: lieuController, decoration: InputDecoration(labelText: 'Lieu')),
+              TextField(controller: activitesController, decoration: InputDecoration(labelText: 'Activités')),
+              TextField(controller: competencesController, decoration: InputDecoration(labelText: 'Compétences')),
+              TextField(controller: presentationController, decoration: InputDecoration(labelText: 'Présentation de l’entreprise')),
+              TextField(controller: objectifsController, decoration: InputDecoration(labelText: 'Objectifs du stage')),
+              TextField(controller: missionsController, decoration: InputDecoration(labelText: 'Missions réalisées')),
+              TextField(controller: difficultesController, decoration: InputDecoration(labelText: 'Difficultés rencontrées')),
+              TextField(controller: conclusionController, decoration: InputDecoration(labelText: 'Conclusion')),
             ],
           ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _resetControllers();
+            },
+            child: Text('Annuler'),
+          ),
+          ElevatedButton(
+            onPressed: () => _addOrUpdateJournee(docId: doc?.id),
+            child: Text(doc == null ? 'Ajouter' : 'Modifier'),
+          ),
+        ],
+      ),
     );
   }
 
@@ -109,15 +121,13 @@ class _JourneeStagePageState extends State<JourneeStagePage> {
     return Scaffold(
       appBar: AppBar(title: Text('Journées de Stage')),
       body: StreamBuilder<QuerySnapshot>(
-        stream:
-            _firestore
-                .collection('journees_stage')
-                .where('uid', isEqualTo: uid)
-                .orderBy('date', descending: true)
-                .snapshots(),
+        stream: _firestore
+            .collection('journees_stage')
+            .where('uid', isEqualTo: uid)
+            .orderBy('date', descending: true)
+            .snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData)
-            return Center(child: CircularProgressIndicator());
+          if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
 
           final docs = snapshot.data!.docs;
 
@@ -126,6 +136,7 @@ class _JourneeStagePageState extends State<JourneeStagePage> {
             itemBuilder: (context, index) {
               final journee = docs[index];
               return Card(
+                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 child: ListTile(
                   title: Text("${journee['date']} - ${journee['lieu']}"),
                   subtitle: Column(
@@ -133,8 +144,14 @@ class _JourneeStagePageState extends State<JourneeStagePage> {
                     children: [
                       Text("Activités : ${journee['activites']}"),
                       Text("Compétences : ${journee['competences']}"),
+                      Text("Présentation : ${journee['presentation']}"),
+                      Text("Objectifs : ${journee['objectifs']}"),
+                      Text("Missions : ${journee['missions']}"),
+                      Text("Difficultés : ${journee['difficultes']}"),
+                      Text("Conclusion : ${journee['conclusion']}"),
                     ],
                   ),
+                  isThreeLine: true,
                   onTap: () => _showForm(doc: journee),
                   trailing: IconButton(
                     icon: Icon(Icons.delete, color: Colors.red),
@@ -153,3 +170,4 @@ class _JourneeStagePageState extends State<JourneeStagePage> {
     );
   }
 }
+s
