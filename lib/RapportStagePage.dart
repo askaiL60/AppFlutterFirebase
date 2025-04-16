@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class RapportStagePage extends StatefulWidget {
   const RapportStagePage({super.key});
@@ -27,6 +30,56 @@ class _RapportStagePageState extends State<RapportStagePage> {
   void initState() {
     super.initState();
     _loadRapport();
+  }
+
+  Future<void> _exportToPDF() async {
+    final pdfDoc = pw.Document();
+
+    pdfDoc.addPage(
+      pw.MultiPage(
+        build:
+            (pw.Context context) => [
+              pw.Text(
+                "Rapport de Stage",
+                style: pw.TextStyle(
+                  fontSize: 24,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+              pw.SizedBox(height: 20),
+              _buildPdfSection(
+                "Présentation de l’entreprise",
+                presentationController.text,
+              ),
+              _buildPdfSection("Objectifs du stage", objectifsController.text),
+              _buildPdfSection("Missions réalisées", missionsController.text),
+              _buildPdfSection(
+                "Difficultés rencontrées",
+                difficultesController.text,
+              ),
+              _buildPdfSection("Conclusion", conclusionController.text),
+            ],
+      ),
+    );
+
+    await Printing.layoutPdf(
+      onLayout: (PdfPageFormat format) async => pdfDoc.save(),
+    );
+  }
+
+  pw.Widget _buildPdfSection(String title, String content) {
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Text(
+          title,
+          style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold),
+        ),
+        pw.SizedBox(height: 5),
+        pw.Text(content, style: pw.TextStyle(fontSize: 14)),
+        pw.SizedBox(height: 15),
+      ],
+    );
   }
 
   Future<void> _loadRapport() async {
@@ -103,6 +156,11 @@ class _RapportStagePageState extends State<RapportStagePage> {
               ElevatedButton(
                 onPressed: _saveRapport,
                 child: const Text('Enregistrer le rapport'),
+              ),
+              ElevatedButton.icon(
+                onPressed: _exportToPDF,
+                icon: const Icon(Icons.picture_as_pdf),
+                label: const Text('Exporter en PDF'),
               ),
             ],
           ),

@@ -114,14 +114,14 @@ class ProfilePage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => JourneeStagePage()),
                 );
               },
-              child: const Text("Voir mes journées de stage"),
+              child: const Text("Consulter mes journées de stage"),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/rapport');
               },
-              child: const Text("Voir / Modifier le rapport de stage"),
+              child: const Text("Consulter le rapport de stage"),
             ),
             ElevatedButton(
               onPressed: () {
