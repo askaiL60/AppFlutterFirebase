@@ -17,10 +17,7 @@ class HomePage extends StatelessWidget {
             icon: const Icon(Icons.logout),
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
-              Navigator.pushReplacementNamed(
-                context,
-                '/login',
-              ); // Retour à la page de connexion après déconnexion
+              Navigator.pushReplacementNamed(context, '/login');
             },
           ),
         ],
@@ -39,23 +36,23 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  '/profile',
-                ); // Redirection vers la page de profil
+                Navigator.pushNamed(context, '/profile');
               },
               child: const Text('Voir le profil'),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/rapport');
+              },
+              child: const Text('Rédiger le rapport de stage'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
               onPressed: () async {
-                // Suppression de compte
                 try {
                   await user?.delete();
-                  Navigator.pushReplacementNamed(
-                    context,
-                    '/login',
-                  ); // Redirection après suppression de compte
+                  Navigator.pushReplacementNamed(context, '/login');
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -70,7 +67,7 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/login'); //Retour
+                Navigator.pushNamed(context, '/login');
               },
               child: const Text('Retour'),
             ),
@@ -117,12 +114,18 @@ class ProfilePage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => JourneeStagePage()),
                 );
               },
-              child: Text("Voir mes journées de stage"),
+              child: const Text("Voir mes journées de stage"),
             ),
-
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/login'); // Retour
+                Navigator.pushNamed(context, '/rapport');
+              },
+              child: const Text("Voir / Modifier le rapport de stage"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/login');
               },
               child: const Text('Retour'),
             ),

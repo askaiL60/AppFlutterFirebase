@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // importation cloud Firestore
 import 'login_page.dart';
 import 'home_page.dart';
+import 'RapportStagePage.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
                 const HomePage(), // Page d'accueil pour les utilisateurs connectés
         '/profile':
             (context) => const ProfilePage(), // Page de profil (si nécessaire)
+        '/rapport': (context) => const RapportStagePage(),
       },
     );
   }
