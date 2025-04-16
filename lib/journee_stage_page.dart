@@ -76,37 +76,75 @@ class _JourneeStagePageState extends State<JourneeStagePage> {
 
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text(doc == null ? 'Ajouter une journée' : 'Modifier la journée'),
-        content: SingleChildScrollView(
-          child: Column(
-            children: [
-              TextField(controller: dateController, decoration: InputDecoration(labelText: 'Date')),
-              TextField(controller: lieuController, decoration: InputDecoration(labelText: 'Lieu')),
-              TextField(controller: activitesController, decoration: InputDecoration(labelText: 'Activités')),
-              TextField(controller: competencesController, decoration: InputDecoration(labelText: 'Compétences')),
-              TextField(controller: presentationController, decoration: InputDecoration(labelText: 'Présentation de l’entreprise')),
-              TextField(controller: objectifsController, decoration: InputDecoration(labelText: 'Objectifs du stage')),
-              TextField(controller: missionsController, decoration: InputDecoration(labelText: 'Missions réalisées')),
-              TextField(controller: difficultesController, decoration: InputDecoration(labelText: 'Difficultés rencontrées')),
-              TextField(controller: conclusionController, decoration: InputDecoration(labelText: 'Conclusion')),
+      builder:
+          (_) => AlertDialog(
+            title: Text(
+              doc == null ? 'Ajouter une journée' : 'Modifier la journée',
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  TextField(
+                    controller: dateController,
+                    decoration: InputDecoration(labelText: 'Date'),
+                  ),
+                  TextField(
+                    controller: lieuController,
+                    decoration: InputDecoration(labelText: 'Lieu'),
+                  ),
+                  TextField(
+                    controller: activitesController,
+                    decoration: InputDecoration(labelText: 'Activités'),
+                  ),
+                  TextField(
+                    controller: competencesController,
+                    decoration: InputDecoration(labelText: 'Compétences'),
+                  ),
+                  TextField(
+                    controller: presentationController,
+                    decoration: InputDecoration(
+                      labelText: 'Présentation de l’entreprise',
+                    ),
+                  ),
+                  TextField(
+                    controller: objectifsController,
+                    decoration: InputDecoration(
+                      labelText: 'Objectifs du stage',
+                    ),
+                  ),
+                  TextField(
+                    controller: missionsController,
+                    decoration: InputDecoration(
+                      labelText: 'Missions réalisées',
+                    ),
+                  ),
+                  TextField(
+                    controller: difficultesController,
+                    decoration: InputDecoration(
+                      labelText: 'Difficultés rencontrées',
+                    ),
+                  ),
+                  TextField(
+                    controller: conclusionController,
+                    decoration: InputDecoration(labelText: 'Conclusion'),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  _resetControllers();
+                },
+                child: Text('Annuler'),
+              ),
+              ElevatedButton(
+                onPressed: () => _addOrUpdateJournee(docId: doc?.id),
+                child: Text(doc == null ? 'Ajouter' : 'Modifier'),
+              ),
             ],
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _resetControllers();
-            },
-            child: Text('Annuler'),
-          ),
-          ElevatedButton(
-            onPressed: () => _addOrUpdateJournee(docId: doc?.id),
-            child: Text(doc == null ? 'Ajouter' : 'Modifier'),
-          ),
-        ],
-      ),
     );
   }
 
@@ -121,13 +159,15 @@ class _JourneeStagePageState extends State<JourneeStagePage> {
     return Scaffold(
       appBar: AppBar(title: Text('Journées de Stage')),
       body: StreamBuilder<QuerySnapshot>(
-        stream: _firestore
-            .collection('journees_stage')
-            .where('uid', isEqualTo: uid)
-            .orderBy('date', descending: true)
-            .snapshots(),
+        stream:
+            _firestore
+                .collection('journees_stage')
+                .where('uid', isEqualTo: uid)
+                .orderBy('date', descending: true)
+                .snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+          if (!snapshot.hasData)
+            return Center(child: CircularProgressIndicator());
 
           final docs = snapshot.data!.docs;
 
@@ -170,4 +210,3 @@ class _JourneeStagePageState extends State<JourneeStagePage> {
     );
   }
 }
-s
