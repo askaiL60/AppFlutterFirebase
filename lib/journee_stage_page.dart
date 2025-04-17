@@ -17,22 +17,12 @@ class _JourneeStagePageState extends State<JourneeStagePage> {
   final TextEditingController lieuController = TextEditingController();
   final TextEditingController activitesController = TextEditingController();
   final TextEditingController competencesController = TextEditingController();
-  final TextEditingController presentationController = TextEditingController();
-  final TextEditingController objectifsController = TextEditingController();
-  final TextEditingController missionsController = TextEditingController();
-  final TextEditingController difficultesController = TextEditingController();
-  final TextEditingController conclusionController = TextEditingController();
 
   void _resetControllers() {
     dateController.clear();
     lieuController.clear();
     activitesController.clear();
     competencesController.clear();
-    presentationController.clear();
-    objectifsController.clear();
-    missionsController.clear();
-    difficultesController.clear();
-    conclusionController.clear();
   }
 
   Future<void> _addOrUpdateJournee({String? docId}) async {
@@ -43,11 +33,6 @@ class _JourneeStagePageState extends State<JourneeStagePage> {
       'lieu': lieuController.text,
       'activites': activitesController.text,
       'competences': competencesController.text,
-      'presentation': presentationController.text,
-      'objectifs': objectifsController.text,
-      'missions': missionsController.text,
-      'difficultes': difficultesController.text,
-      'conclusion': conclusionController.text,
       'uid': uid,
     };
 
@@ -66,12 +51,6 @@ class _JourneeStagePageState extends State<JourneeStagePage> {
       dateController.text = doc['date'];
       lieuController.text = doc['lieu'];
       activitesController.text = doc['activites'];
-      competencesController.text = doc['competences'];
-      presentationController.text = doc['presentation'];
-      objectifsController.text = doc['objectifs'];
-      missionsController.text = doc['missions'];
-      difficultesController.text = doc['difficultes'];
-      conclusionController.text = doc['conclusion'];
     }
 
     showDialog(
@@ -99,34 +78,6 @@ class _JourneeStagePageState extends State<JourneeStagePage> {
                   TextField(
                     controller: competencesController,
                     decoration: InputDecoration(labelText: 'Compétences'),
-                  ),
-                  TextField(
-                    controller: presentationController,
-                    decoration: InputDecoration(
-                      labelText: 'Présentation de l’entreprise',
-                    ),
-                  ),
-                  TextField(
-                    controller: objectifsController,
-                    decoration: InputDecoration(
-                      labelText: 'Objectifs du stage',
-                    ),
-                  ),
-                  TextField(
-                    controller: missionsController,
-                    decoration: InputDecoration(
-                      labelText: 'Missions réalisées',
-                    ),
-                  ),
-                  TextField(
-                    controller: difficultesController,
-                    decoration: InputDecoration(
-                      labelText: 'Difficultés rencontrées',
-                    ),
-                  ),
-                  TextField(
-                    controller: conclusionController,
-                    decoration: InputDecoration(labelText: 'Conclusion'),
                   ),
                 ],
               ),
@@ -184,11 +135,6 @@ class _JourneeStagePageState extends State<JourneeStagePage> {
                     children: [
                       Text("Activités : ${journee['activites']}"),
                       Text("Compétences : ${journee['competences']}"),
-                      Text("Présentation : ${journee['presentation']}"),
-                      Text("Objectifs : ${journee['objectifs']}"),
-                      Text("Missions : ${journee['missions']}"),
-                      Text("Difficultés : ${journee['difficultes']}"),
-                      Text("Conclusion : ${journee['conclusion']}"),
                     ],
                   ),
                   isThreeLine: true,
